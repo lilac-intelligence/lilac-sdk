@@ -1,0 +1,39 @@
+{
+  "name": "lilac-sdk",
+  "version": "1.0.0",
+  "description": "Reports an agent's sessions to a Lilac deployment. Wrap nothing: capture the model's response after each call.",
+  "license": "MIT",
+  "author": "Lilac Intelligence <founders@trylilac.ai>",
+  "homepage": "https://trylilac.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lilac-intelligence/lilac-sdk.git"
+  },
+  "bugs": "https://github.com/lilac-intelligence/lilac-sdk/issues",
+  "keywords": ["lilac", "agents", "llm", "observability", "opentelemetry", "otlp", "genai"],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
