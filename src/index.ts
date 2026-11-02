@@ -82,6 +82,7 @@ class Lilac {
     if (opts.timeoutMs !== undefined) this.timeoutMs = opts.timeoutMs
     if (!this.endpoint) {
       this.warnOnce('endpoint', 'no endpoint: pass endpoint= to init(), or set LILAC_ENDPOINT. '
+        + 'A .env file is not read on its own: load it with node --env-file=.env, or your framework\'s loader. '
         + 'Nothing will be sent. This build has no default — your sessions go to your own '
         + 'deployment and nowhere else.')
     }
