@@ -17,6 +17,28 @@ wrapper around your provider client and nothing on your agent's critical path un
 npm install lilac-sdk
 ```
 
+## Configuration
+
+The SDK reads its settings from the environment, so none of them has to be written into your code:
+
+| Variable | What it holds |
+|---|---|
+| `LILAC_ENDPOINT` | your Lilac's address: `https://<workspace>.trylilac.ai` on Lilac's hosted service, or your own deployment's address if you run Lilac yourself |
+| `LILAC_INGEST_KEY` | that deployment's ingest key |
+| `LILAC_AGENT_VERSION` | optional: the build of your agent, so trends can tell a deploy from a traffic shift |
+
+An option passed to `init()` wins over the variable of the same meaning.
+
+The SDK reads `process.env` and nothing else: it does not load a `.env` file itself. If you keep these
+in one, load it the way you load the rest of your service's settings: `node --env-file=.env app.js`
+(Node 20.6 or later), `tsx --env-file=.env`, or your framework's own loader.
+
+```bash
+# .env — keep it out of version control; the ingest key is a secret
+LILAC_ENDPOINT=https://<workspace>.trylilac.ai
+LILAC_INGEST_KEY=<your ingest key>
+```
+
 ## Quickstart
 
 ```ts
@@ -27,8 +49,8 @@ const openai = new OpenAI()
 
 lilac.init({
   agentId: 'support',                        // which agent these sessions belong to
-  endpoint: process.env.LILAC_ENDPOINT,      // your deployment's base URL
-  apiKey: process.env.LILAC_INGEST_KEY,      // your deployment's ingest key
+  endpoint: process.env.LILAC_ENDPOINT,      // https://<workspace>.trylilac.ai, or your own address
+  apiKey: process.env.LILAC_INGEST_KEY,      // that deployment's ingest key
 })
 
 const response = await openai.chat.completions.create({ model, messages, tools })
@@ -59,7 +81,7 @@ Five methods.
 lilac.init({
   agentId: 'support',                        // required
   agentVersion: process.env.GIT_SHA,         // or LILAC_AGENT_VERSION: lets trends tell a deploy from a traffic shift
-  endpoint: 'https://lilac.example.com',     // or LILAC_ENDPOINT
+  endpoint: 'https://<workspace>.trylilac.ai', // or LILAC_ENDPOINT; your own address if self-hosted
   apiKey: process.env.LILAC_INGEST_KEY,      // or LILAC_INGEST_KEY
   tools: { issue_refund: { effect: 'irreversible', gated_by: 'manager approval' } },
   timeoutMs: 5_000,                          // per send; 5s if omitted
